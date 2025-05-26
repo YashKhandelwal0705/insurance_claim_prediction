@@ -1,2 +1,15 @@
+# Force consistent line endings
+* text=auto
+
+# Treat Python, YAML, Markdown etc. as text files (LF)
+*.py text eol=lf
+*.ipynb text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+*.csv text eol=lf
+*.txt text eol=lf
+
+# Binary files via Git LFS
 *.pkl filter=lfs diff=lfs merge=lfs -text
 *.joblib filter=lfs diff=lfs merge=lfs -text
