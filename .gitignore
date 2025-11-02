@@ -25,7 +25,6 @@ ehthumbs.db
 *.log
 .env
 
-models/*.pkl
 models/*.joblib
 
 
