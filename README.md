@@ -1,252 +1,330 @@
-# Insurance Claim Severity Prediction
+# 🛡️ Insurance Claim Severity Predictor
 
-## Project Overview
+A comprehensive machine learning solution for predicting insurance claim severity based on policy and vehicle details. This project uses advanced feature engineering, multiple ML algorithms, and explainable AI to provide actionable insights for insurance claim assessment.
 
-This project implements a sophisticated machine learning solution for predicting insurance claim severity, enabling insurance companies to:
-- Accurately predict claim severity
-- Identify high-risk policyholders
-- Implement risk-based pricing
-- Optimize claims processing
+![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Status](https://img.shields.io/badge/status-active-success.svg)
 
-## Dataset Description
+## 📋 Table of Contents
 
-The synthetic dataset includes key information about insurance claims and policyholders:
-- **Policyholder Information**
-  - `driver_age`: Age of the policyholder (18-80 years)
-  - `past_claims`: Number of previous claims (Poisson distributed with mean 0.5)
+- [Overview](#overview)
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Model Performance](#model-performance)
+- [Technical Details](#technical-details)
+- [Web Application](#web-application)
+- [Contributing](#contributing)
+- [License](#license)
 
-- **Vehicle Information**
-  - `vehicle_age`: Age of the vehicle in years (0-20 years)
-  - `vehicle_type`: Type of vehicle (Sports, Sedan, SUV, Truck)
-  - `vehicle_make`: Make category of vehicle (High-end, Regular)
+## 🎯 Overview
 
-- **Policy Information**
-  - `region`: Geographic region (Urban, Suburban, Rural)
+This project predicts the potential severity (cost) of insurance claims using machine learning. It analyzes factors such as:
+- Driver demographics (age, claim history)
+- Vehicle information (type, make, age)
+- Accident details (type, region)
 
-- **Accident Information**
-  - `accident_type`: Severity of accident (Minor, Moderate, Severe)
+The solution includes:
+- **Data preprocessing & feature engineering** with 32+ engineered features
+- **Multiple ML models** (Linear Regression, Random Forest, XGBoost)
+- **Model explainability** using SHAP (SHapley Additive exPlanations)
+- **Interactive web application** built with Streamlit
+- **Comprehensive model evaluation** and business insights
 
-- **Target Variable**
-  - `claim_severity`: Amount of claim in monetary units (log-transformed target)
+## ✨ Features
 
-## Feature Engineering
+### Machine Learning Pipeline
+- ✅ Automated feature engineering with polynomial and interaction features
+- ✅ Multiple model training with hyperparameter tuning
+- ✅ Cross-validation and rigorous model evaluation
+- ✅ Log-transformed target variable for better predictions
 
-The dataset includes engineered features that capture business-relevant relationships:
-1. **Age-based Factors**
-   - Young drivers (18-25) have higher risk multiplier
-   - Vehicle age has incremental risk factor
+### Model Explainability
+- 📊 SHAP waterfall plots for individual predictions
+- 🔍 Feature importance analysis
+- 💡 Business-friendly risk factor insights
 
-2. **Vehicle-based Factors**
-   - Vehicle type multipliers:
-     - Sedan: 1.0x
-     - SUV: 1.2x
-     - Sports: 1.5x
-     - Truck: 1.3x
-   
-   - Vehicle make multipliers:
-     - High-end: 1.5x
-     - Regular: 1.0x
+### Web Application
+- 🖥️ User-friendly Streamlit interface
+- 📈 Real-time predictions with confidence metrics
+- 🧠 Visual explanations of predictions
+- 🎯 Actionable business insights
 
-3. **Accident-based Factors**
-   - Accident severity multipliers:
-     - Minor: 0.5x
-     - Moderate: 1.0x
-     - Severe: 2.0x
+## 📁 Project Structure
 
-4. **Geographic Factors**
-   - Region multipliers:
-     - Urban: 1.2x
-     - Suburban: 1.0x
-     - Rural: 0.8x
+```
+insurance_claim_prediction/
+│
+├── app.py                          # Streamlit web application
+├── evaluate_model.py               # Model evaluation script
+├── requirements.txt                # Python dependencies
+├── setup.py                        # Package setup configuration
+├── README.md                       # Project documentation
+│
+├── data/                           # Data directory
+│   ├── insurance_claims.csv        # Raw dataset
+│   ├── train.csv                   # Training data
+│   ├── test.csv                    # Test data
+│   ├── train_engineered.csv        # Engineered training features
+│   └── test_engineered.csv         # Engineered test features
+│
+├── models/                         # Saved model artifacts
+│   ├── best_model.pkl              # Best performing model
+│   ├── tree_preprocessor.pkl       # Preprocessing pipeline
+│   ├── linear_preprocessor.pkl     # Linear model preprocessor
+│   ├── shap_explainer.pkl          # SHAP explainer object
+│   └── generate_shap_explainer.py  # SHAP explainer generation
+│
+├── notebooks/                      # Jupyter notebooks
+│   ├── 01_data_exploration.ipynb   # Initial data exploration
+│   ├── 02_eda_analysis.ipynb       # Exploratory data analysis
+│   └── 03_model_evaluation.ipynb   # Model evaluation & comparison
+│
+├── src/                            # Source code
+│   ├── data/                       # Data processing modules
+│   │   ├── preprocessing.py        # Data preprocessing
+│   │   ├── feature_engineering.py  # Feature engineering pipeline
+│   │   └── generate_synthetic_data.py
+│   │
+│   ├── models/                     # Model training & evaluation
+│   │   ├── model_training.py       # Model training pipeline
+│   │   ├── model_evaluation.py     # Model evaluation utilities
+│   │   ├── model_explainability.py # SHAP & interpretability
+│   │   └── hyperparameter_tuning.py
+│   │
+│   ├── business/                   # Business logic
+│   │   └── business_translation.py # Convert predictions to insights
+│   │
+│   └── utils/                      # Utility functions
+│       └── app_utils.py            # Helper functions for app
+│
+└── reports/                        # Generated reports
+    ├── feature_importance.csv      # Feature importance scores
+    ├── model_evaluation_results.csv
+    ├── sample_predictions.csv
+    └── figures/                    # Visualization outputs
+```
 
-5. **Historical Factors**
-   - Past claims multiplier (10% increase per claim)
+## 🚀 Installation
 
-## Problem Statement
+### Prerequisites
+- Python 3.8 or higher
+- pip package manager
 
-Insurance companies face significant challenges in:
-1. Accurately predicting claim severity
-2. Identifying high-risk policyholders
-3. Setting appropriate premium rates
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/YashKhandelwal0705/insurance_claim_prediction.git
+cd insurance_claim_prediction
+```
 
-This project addresses these challenges by implementing:
-1. **Risk Prediction System**
-   - XGBoost model with R² score of 0.87
-   - Risk threshold of 1.2x for high-risk cases
-   - SHAP explainability for risk factors
+### Step 2: Create Virtual Environment (Recommended)
+```bash
+# Windows
+python -m venv venv
+.\venv\Scripts\activate
 
-2. **Premium Adjustment Logic**
-   - Premium increases based on:
-     - Vehicle type (15% for SUV/Luxury)
-     - Driver age (<25 years: 10%)
-     - Region (Urban/High-Risk: 15%)
-     - Past claims (10% per claim)
+# Linux/Mac
+python3 -m venv venv
+source venv/bin/activate
+```
 
-3. **Business Insights Generation**
-   - Risk factor identification
-   - Premium adjustment recommendations
-   - Risky policy flagging system
-
-## Business Impact
-
-The system provides specific business benefits:
-1. **Risk Management**
-   - Automatic identification of high-risk policies
-   - Risk factor breakdown for each case
-   - Risk threshold of 1.2x for manual review
-
-2. **Premium Pricing**
-   - Data-driven premium adjustments
-   - Specific adjustment percentages for risk factors
-   - Premium recommendations based on risk profile
-
-3. **Claims Processing**
-   - Priority flagging for high-risk claims
-   - Risk factor documentation
-   - Business insights for claims review
-
-## ML Approach
-
-We implemented a robust ML pipeline with multiple models:
-
-1. **Feature Engineering**
-   - Feature binning for driver age and vehicle age
-   - Categorical variable encoding using OneHotEncoder
-   - Feature scaling for linear models
-   - Outlier handling using Z-score method
-
-2. **Models Used**
-   - Random Forest Regressor
-   - XGBoost Regressor
-   - Linear Regression
-
-3. **Model Training**
-   - 5-fold cross-validation
-   - Log-transformed target variable
-   - Separate preprocessing pipelines for tree-based and linear models
-   - Model persistence using joblib
-
-## Evaluation Metrics
-
-We evaluated the models using multiple metrics:
-
-1. **Random Forest**
-   - R²: 0.85
-   - MAE: 2,500
-   - MSE: 12,000,000
-
-2. **XGBoost**
-   - R²: 0.87
-   - MAE: 2,300
-   - MSE: 10,500,000
-
-3. **Linear Regression**
-   - R²: 0.82
-   - MAE: 2,800
-   - MSE: 14,000,000
-
-
-## Key Findings & Business Insights
-
-1. **Risk Factors Analysis**
-   - Vehicle type significantly impacts claim severity
-   - Urban areas have higher claim frequencies
-   - Past claims history is a strong predictor
-   - Certain vehicle makes are associated with higher risk
-
-2. **Premium Recommendations**
-   - Implement risk-based pricing strategies
-   - Target preventive measures for high-risk segments
-   - Adjust premiums based on risk factors
-   - Implement tiered premium structures
-
-3. **SHAP Analysis**
-   - Feature importance analysis
-   - Individual prediction explanations
-   - Risk factor identification
-
-## How to Run
-
-1. Install dependencies:
+### Step 3: Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Run the training pipeline:
+Or install as a package:
 ```bash
-python src/models/train_model.py
+pip install -e .
 ```
 
-3. Generate predictions:
+## 📖 Usage
+
+### 1. Data Preparation & Feature Engineering
 ```bash
-python src/models/predict.py
+python src/data/generate_synthetic_data.py  # Generate synthetic data (if needed)
+python src/data/feature_engineering.py      # Engineer features
 ```
 
-## Tools Used
-
-- **Data Processing**
-  - Pandas
-  - NumPy
-  - Scikit-learn
-
-- **Machine Learning**
-  - XGBoost
-  - Random Forest
-  - SHAP for explainability
-
-- **Visualization**
-  - Plotly
-  - Matplotlib
-  - Seaborn
-
-## Future Work
-
-1. **Dashboard Development**
-   - Interactive risk analysis
-   - Real-time predictions
-   - Business insights visualization
-
-2. **Model Enhancements**
-   - Model ensemble
-   - Feature engineering improvements
-   - Hyperparameter optimization
-
-3. **Monitoring & Maintenance**
-   - Data drift detection
-   - Model performance monitoring
-   - Automated retraining pipeline
-
-4. **Business Integration**
-   - Premium adjustment system
-   - Risk scoring API
-   - Claims processing optimization
-
-## Documentation
-
-Detailed documentation of the project is available in the `reports` directory, including:
-- Model performance analysis
-- Feature importance reports
-- Business insights documentation
-- Implementation guides
-
-## License
-
-MIT License
-
-## Project Structure
-```
-insurance_claim_prediction/
-├── data/              # Dataset and processed data
-├── notebooks/         # Jupyter notebooks for EDA and modeling
-├── src/              # Source code
-│   ├── data/         # Data processing scripts
-│   ├── models/       # Model training and prediction scripts
-│   └── utils/        # Utility functions
-├── models/           # Trained model files
-└── requirements.txt
+### 2. Model Training
+```bash
+python src/models/model_training.py         # Train all models
+python src/models/hyperparameter_tuning.py  # Fine-tune hyperparameters
 ```
 
+### 3. Model Evaluation
+```bash
+python evaluate_model.py                    # Evaluate model performance
+python src/models/model_explainability.py   # Generate SHAP explanations
+```
 
+### 4. Generate SHAP Explainer
+```bash
+python models/generate_shap_explainer.py    # Create SHAP explainer for app
+```
 
-## License
-MIT License
+### 5. Launch Web Application
+```bash
+streamlit run app.py
+```
+
+The application will open in your default browser at `http://localhost:8501`
+
+## 📊 Model Performance
+
+### Best Model: XGBoost Regressor
+
+**Test Set Performance:**
+- **R² Score:** 0.9356 (93.56%)
+- **MAE:** $963.07
+- **RMSE:** $1,277.11
+- **MAPE:** 17.80%
+
+**Training Set Performance:**
+- **R² Score:** 0.9726 (97.26%)
+- **MAE:** $715.66
+- **RMSE:** $919.35
+- **MAPE:** 12.51%
+
+**Prediction Statistics:**
+- **Actual Mean Claim (Test):** $7,587.34
+- **Predicted Mean Claim (Test):** $7,454.09
+
+### Model Comparison
+
+| Model              | R² Score | MAE ($) | RMSE ($) | Training Time |
+|-------------------|----------|---------|----------|---------------|
+| XGBoost           | 0.9356   | 963.07  | 1,277.11 | ~5 min        |
+| Random Forest     | 0.9234   | 1,100+  | 1,500+   | ~3 min        |
+| Linear Regression | 0.8567   | 1,500+  | 2,000+   | ~1 min        |
+
+## 🔧 Technical Details
+
+### Feature Engineering
+The project implements comprehensive feature engineering:
+
+1. **Binning Features:**
+   - Driver age groups: Young (18-25), Mid-age (25-40), Senior (40-60), Elderly (60+)
+   - Vehicle age groups: New (0-5), Mid-age (5-10), Old (10-15), Very old (15+)
+
+2. **Polynomial Features:**
+   - Second-degree polynomials for numerical features
+   - Interaction terms between key variables
+
+3. **Interaction Features:**
+   - Age × Vehicle type
+   - Vehicle age × Make
+   - Driver age × Vehicle make
+
+4. **Total Features:** 32 engineered features
+
+### Preprocessing Pipeline
+- **Categorical encoding:** One-Hot Encoding
+- **Numerical scaling:** StandardScaler (for linear models)
+- **Target transformation:** Log transformation (log1p)
+
+### Model Architecture
+```python
+Pipeline([
+    ('preprocessor', ColumnTransformer([
+        ('cat', OneHotEncoder(), categorical_cols),
+        ('num', StandardScaler(), numerical_cols)
+    ])),
+    ('model', XGBRegressor(
+        n_estimators=300,
+        max_depth=7,
+        learning_rate=0.1,
+        subsample=0.8,
+        colsample_bytree=0.8
+    ))
+])
+```
+
+## 🖥️ Web Application
+
+The Streamlit application provides:
+
+### Features:
+1. **Interactive Input Form:**
+   - Driver age slider (18-80)
+   - Past claims counter
+   - Vehicle details (type, make, age)
+   - Accident type and region selectors
+
+2. **Prediction Dashboard:**
+   - Estimated claim amount with currency formatting
+   - Key risk factors with icons
+   - Business-friendly insights
+
+3. **Explainability Tab:**
+   - SHAP waterfall plot
+   - Feature contribution analysis
+   - Visual explanation of prediction drivers
+
+### Running the App:
+```bash
+streamlit run app.py
+```
+
+Navigate to `http://localhost:8501` to access the interface.
+
+## 🧪 Testing
+
+Run model evaluation:
+```bash
+python evaluate_model.py
+```
+
+Expected output:
+```
+MODEL PERFORMANCE EVALUATION
+============================================================
+
+📊 TEST SET PERFORMANCE:
+------------------------------------------------------------
+  MAE (Mean Absolute Error):        $    963.07
+  RMSE (Root Mean Squared Error):   $  1,277.11
+  R² Score:                              0.9356 (93.56%)
+  MAPE (Mean Absolute % Error):           17.80%
+
+✅ INTERPRETATION:
+------------------------------------------------------------
+  🌟 EXCELLENT: Model explains >90% of variance!
+  ✅ GOOD: Average prediction error <20%
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👤 Author
+
+**Yash Khandelwal**
+- GitHub: [@YashKhandelwal0705](https://github.com/YashKhandelwal0705)
+
+## 🙏 Acknowledgments
+
+- XGBoost library for high-performance gradient boosting
+- SHAP library for model interpretability
+- Streamlit for the web application framework
+- scikit-learn for ML utilities and preprocessing
+
+## 📞 Contact
+
+For questions or feedback, please open an issue on GitHub or contact the author.
+
+---
+
+⭐ If you find this project helpful, please consider giving it a star!
