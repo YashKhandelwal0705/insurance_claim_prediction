@@ -67,7 +67,8 @@ class FeatureEngineering:
         # Create DataFrame of polynomial features
         poly_df = pd.DataFrame(poly_features, columns=feature_names, index=df.index)
         
-        # Add polynomial features to original DataFrame
+        # Drop original numerical columns and add polynomial features
+        df = df.drop(columns=num_features)
         df = pd.concat([df, poly_df], axis=1)
         
         return df
@@ -131,28 +132,32 @@ def main():
     train_df = pd.read_csv(r'F:\Projects\insurance_claim_prediction\data\train.csv')
     test_df = pd.read_csv(r'F:\Projects\insurance_claim_prediction\data\test.csv')
     
-    # Initialize feature engineering
+    # Initialize feature engineering class
     fe = FeatureEngineering()
     
-    # Transform training and test data
-    train_df = fe.transform(train_df)
-    test_df = fe.transform(test_df)
+    # Apply feature engineering to training and test data
+    train_engineered_df = fe.transform(train_df)
+    test_engineered_df = fe.transform(test_df)
     
-    # Create preprocessing pipelines
+    # Create the feature pipeline (preprocessor)
     tree_preprocessor, linear_preprocessor = fe.create_feature_pipeline()
     
-    # Save preprocessing objects
+    # Fit the preprocessors on the engineered training data
+    tree_preprocessor.fit(train_engineered_df)
+    linear_preprocessor.fit(train_engineered_df)
+    
+    # Save the fitted preprocessor objects
     os.makedirs(r'F:\Projects\insurance_claim_prediction\models', exist_ok=True)
     joblib.dump(tree_preprocessor, r'F:\Projects\insurance_claim_prediction\models\tree_preprocessor.pkl')
     joblib.dump(linear_preprocessor, r'F:\Projects\insurance_claim_prediction\models\linear_preprocessor.pkl')
     
     print("Feature engineering completed!")
-    print(f"Training features: {train_df.shape[1]}")
-    print(f"Test features: {test_df.shape[1]}")
+    print(f"Training features: {train_engineered_df.shape[1]}")
+    print(f"Test features: {test_engineered_df.shape[1]}")
     
     # Save transformed data
-    train_df.to_csv(r'F:\Projects\insurance_claim_prediction\data\train_engineered.csv', index=False)
-    test_df.to_csv(r'F:\Projects\insurance_claim_prediction\data\test_engineered.csv', index=False)
+    train_engineered_df.to_csv(r'F:\Projects\insurance_claim_prediction\data\train_engineered.csv', index=False)
+    test_engineered_df.to_csv(r'F:\Projects\insurance_claim_prediction\data\test_engineered.csv', index=False)
 
 if __name__ == "__main__":
     main()

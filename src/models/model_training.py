@@ -224,6 +224,8 @@ class ModelTrainer:
         
         print("\nStarting model training...")
         print("-" * 50)
+        print(f"Training data shape: {X.shape}")
+        print(f"Features: {X.columns.tolist()}")
         
         # Train Linear Regression
         self.train_linear_regression(X, y)

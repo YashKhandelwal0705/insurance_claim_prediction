@@ -8,7 +8,7 @@ import os
 
 # Load test data
 test_df = pd.read_csv('data/test_engineered.csv')
-X_test = test_df.drop(['claim_severity', 'policy_id'], axis=1)
+X_test = test_df.drop('claim_severity', axis=1)
 y_test = np.log1p(test_df['claim_severity'])  # Using log-transformed target
 
 # Load all trained models

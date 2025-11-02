@@ -1,0 +1,21 @@
+Feature,Importance
+cat__accident_type_Moderate,0.24605957
+cat__accident_type_Minor,0.23356454
+cat__accident_type_Severe,0.13644986
+cat__vehicle_make_High-end,0.060404852
+remainder__high_value_vehicle,0.05562847
+cat__vehicle_profile_Sedan_Regular,0.030646157
+cat__region_Urban,0.025900193
+cat__vehicle_profile_Sedan_High-end,0.02480889
+remainder__vehicle_age,0.021578854
+remainder__poly_vehicle_age^2,0.019189144
+cat__region_Rural,0.016100973
+cat__vehicle_profile_Sports_High-end,0.01559361
+remainder__poly_vehicle_age past_claims,0.014111342
+cat__vehicle_type_Sedan,0.013828749
+cat__vehicle_type_Sports,0.013056428
+remainder__experience_ratio,0.008641487
+cat__vehicle_profile_Truck_High-end,0.0080886055
+cat__vehicle_type_Truck,0.0075659906
+cat__age_accident_severity_mature_Minor,0.0035571365
+cat__claims_category_few_claims,0.0032254902
