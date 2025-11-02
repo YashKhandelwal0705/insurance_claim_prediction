@@ -25,7 +25,7 @@ ehthumbs.db
 *.log
 .env
 
-models/*.joblib
+#models/*.joblib
 
 
 
